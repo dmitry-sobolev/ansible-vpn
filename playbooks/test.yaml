@@ -1,0 +1,7 @@
+---
+- name: test
+  hosts: all
+
+  tasks:
+    - name: prompt smth
+      shell: echo hello world
