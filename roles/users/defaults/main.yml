@@ -1,0 +1,12 @@
+---
+users: []
+# users:
+#   - name: sobolev
+#     keys:
+#       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDtGjJoc/G1dJUcvPpFPkgW6P87Fa6iT3Hp+rwUAnfdkS907a+yjIAfFCnBVNjYxxqhYMLcRjurvlvZ2kdQwvbs/KhMViw8aefPIC/8GYwUf0wImeofm/Wnb9Ei2osSC+pLhrp+mO3sleZExTK368Ix9vMmDo5+oydSRxgWfy0MpfgW+5OzsSbft8P34Qe/KwzM/M5RpKA6X8Yub4MLWXT6OjvlYTXbTwd8meT67sIQULHE1naYhxXwiI9bcYT7Izobvxw07Q9DITvPQUp8jVXcvbu935OAv07DyI1FqTHF9d74PJxtC0V0dkL2r+HGCZw4PIPpdpqvnXjeBShgfWLZ propp@propp-PC
+#     telegram: 112409681
+
+default_password: null
+
+use_telegram_notification: true
+telegram_bot_key: null

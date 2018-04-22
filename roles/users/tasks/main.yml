@@ -1,0 +1,54 @@
+---
+- name: Add groups users
+  group:
+    name: users
+    state: present
+    system: yes
+
+- name: "Adding new users"
+  user:
+    name: "{{ item.name }}"
+    shell: /bin/bash
+    password: "{{ default_password | password_hash('sha512') }}"
+    update_password: on_create
+    append: yes
+    group: users
+    groups: sudo
+    skeleton: /etc/skel
+  register: host_users
+  loop: "{{ users }}"
+
+- name: "Force users to change passwords"
+  shell: "chage -d 0 {{ item.name }}"
+  with_items: "{{ host_users.results }}"
+  when: item.changed
+
+- name: "Adding user's public keys to authorized_keys"
+  authorized_key:
+    user: "{{ item.0.name }}"
+    key: "{{ item.1 }}"
+  loop: "{{ lookup('subelements', users, 'keys', skip_missing=True) }}"
+
+- name: Send notification to new or updated users
+  delegate_to: 127.0.0.1
+  become: false
+  run_once: true
+  telegram:
+    chat_id: "{{ item.item.telegram }}"
+    token: "{{ telegram_bot_key }}"
+    msg_format: markdown
+    msg: '
+    Учетная запись {{ item.name }} была создана на серверах с паролем по-умолчанию {{ default_password }} и добавлен ваш публичный ключ SSH.
+    Для того, чтобы проверить корректность создания попробуйте зайти на сервера:
+    
+    ```
+    {%- for hostname in groups.all %}
+    ssh {{ item.name }}@{{ hostvars[hostname].ansible_ssh_host }}
+
+    {% endfor %}
+    ```
+
+    При первой попытке входа нужно будет сменить пароль по-умолчанию на свой, после чего можно будет заходить по SSH ключу
+    '
+  with_items: "{{ host_users.results }}"
+  when: item.changed and use_telegram_notification
