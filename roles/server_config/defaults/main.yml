@@ -1,0 +1,4 @@
+---
+pip_executable: /usr/bin/pip3
+
+default_interface: eth0

@@ -1,0 +1,32 @@
+---
+- name: Setup software
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    install_recommends: no
+    autoremove: yes
+  with_items:
+    - htop
+    - curl
+    - wget
+    - vim
+    - bash-completion
+    - python3-pip
+    - dbus
+    - ufw
+    - mc
+    - "{{ system_packages }}"
+
+- name: Check if pip present in system
+  shell: "{{ pip_executable }} --version"
+
+- name: Install python packages
+  pip: 
+    name: "{{ item }}"
+    executable: "{{ pip_executable }}"
+    state: present
+  with_items:
+    - pip
+    - setuptools
+    - wheel
+    - "{{ python_packages }}"

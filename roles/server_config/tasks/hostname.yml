@@ -1,0 +1,24 @@
+---
+- name: Generate hostname
+  set_fact:
+    hostname: "{{ (host_prefix + '-' if host_prefix is defined else '' ) + inventory_hostname }}"
+
+- name: Set hostname
+  hostname:
+    name: "{{ hostname }}"
+
+- name: Remove all hosts on 127.0.0.1 except localhost from /etc/hosts
+  lineinfile:
+    destfile: /etc/hosts
+    state: absent
+    regexp: '^127\.0\.0\.1\s(?!localhost)'
+
+- name: Write hostname in /etc/hosts
+  lineinfile:
+    destfile: /etc/hosts
+    state: present
+    regexp: ".*{{ hostname }}$"
+    line: "127.0.0.1 {{ hostname }}"
+
+- name: Check if pip present in system
+  shell: "{{ pip_executable }} --version"

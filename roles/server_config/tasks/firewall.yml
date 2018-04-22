@@ -1,0 +1,13 @@
+---
+# - name: Setup firewall
+#   ufw:
+#     proto: tcp
+#     rule: allow
+#     port: 22
+
+# - name: Allow all outgoing
+#   ufw:
+#     proto: tcp
+#     rule: allow
+#     direction: out
+#     interface: "{{ default_interface }}"
